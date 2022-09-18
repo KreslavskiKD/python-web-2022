@@ -2,7 +2,7 @@
 name = "BaseApp"
 version = "0.0.1"
 description = "Base FastAPI app"
-authors = ["Shakirov Emil <shakirov.ere@gmail.com>"]
+authors = ["Kreslavski Kirill <kirill.kreslavski@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
