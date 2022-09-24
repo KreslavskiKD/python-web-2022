@@ -2,9 +2,9 @@ from pydantic import BaseModel
 
 
 class List(BaseModel):          # this is a list of favourite places
-    """Contract for list"""
+    """Contract for list."""
 
-    owner: int              # owner id
+    owner: str              # owner id
     locations: list[str]    # here should later be some list of locations 
                             # that are geolocation class
 
@@ -12,6 +12,7 @@ class List(BaseModel):          # this is a list of favourite places
 class Post(BaseModel):          # this is post in Postogram
     """Contract for post."""
 
+    pid: int
     title: str
     time: str               # here should later be some time format
     description: str

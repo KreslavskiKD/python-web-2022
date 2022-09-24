@@ -16,7 +16,7 @@ async def read_post(post_id: int):  # noqa: D103
 
 
 @router.get("/users/")
-async def read_user(user_id: str, q: str | None = None):    # noqa: D103
+async def read_user(user_id: str, q: str | None = None):  # noqa: D103
     if q:
         return {"user_id": user_id, "q": q}
     return {"user_id": user_id}
@@ -44,7 +44,5 @@ async def read_user_list(  # noqa: D103
     if q:
         loclist.update({"q": q})
     if not short:
-        loclist.update(
-            {"locations": ["1703", "Shamrock"]}
-        )
+        loclist.update({"locations": ["1703", "Shamrock"]})
     return loclist
