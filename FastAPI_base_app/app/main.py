@@ -2,8 +2,8 @@ import time
 
 from fastapi import FastAPI, Request
 
-from app.routers import router
-from app.auth.router import router as auth_router
+from app.routers import router as main_router
+from app.auth.router import auth_router
 
 app = FastAPI(
     title="Postogram",
@@ -13,7 +13,7 @@ app = FastAPI(
     redoc_url="/docs/redoc",
 )
 
-app.include_router(router)
+app.include_router(main_router)
 app.include_router(auth_router)
 
 

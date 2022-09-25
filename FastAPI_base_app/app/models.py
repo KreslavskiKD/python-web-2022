@@ -1,11 +1,9 @@
-
 from pydantic import BaseModel
-from app.contracts import List as ListModel
+from app.contracts import Locations
 
 
 class User(BaseModel):
     login: str
-    pswd: str
     uuid: str
-    favlist: ListModel
+    favlist: Locations
     posts: list[int]
