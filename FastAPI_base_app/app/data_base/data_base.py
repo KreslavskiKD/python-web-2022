@@ -22,7 +22,7 @@ class DataBase(metaclass=Singleton):  # noqa D101
         Returns: the same user if registered successfully, None otherwise
         """
 
-        if login not in self.logins:
+        if login not in self.logins.values():
             uuid = self.get_uuid()
             self.logins[uuid] = login
             self.pswds[uuid] = pswd
@@ -45,6 +45,8 @@ class DataBase(metaclass=Singleton):  # noqa D101
         """
         if uuid in self.users:
             del self.users[uuid]
+            del self.logins[uuid]
+            del self.pswds[uuid]
             return uuid
         else:
             raise UserNotFoundError
