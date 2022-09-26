@@ -3,30 +3,28 @@ import pytest
 from app.data_base.data_base import DataBase
 
 from app.models import User
-from app.auth.dto import UserRegister
-from app.auth.dto import UserUnregister
+from app.auth.dto import UserRegister, UserUnregister
 from app.contracts import Locations
 from app.exceptions import LoginAlreadyTakenError, UserNotFoundError
 
 user = UserRegister(login="test", pswd="user")
-
-answ_user = User(
-    login="test",
-    uuid="1",
-    favlist=Locations(owner="1", locations=[]),
-    posts=[],
-)
-
-unuser = UserUnregister(uuid="1")
 
 test_db = DataBase()
 
 
 def test_register_ok():  # noqa D103
     test_db.register(login=user.login, pswd=user.pswd)
-    assert test_db.users == {"1": answ_user}
-    assert test_db.logins == {"1": "test"}
-    assert test_db.pswds == {"1": "user"}
+    ind = str(test_db.cid)
+    assert test_db.users == {
+        ind: User(
+            login="test",
+            uuid=ind,
+            favlist=Locations(owner=ind, locations=[]),
+            posts=[],
+        )
+    }
+    assert test_db.logins == {ind: "test"}
+    assert test_db.pswds == {ind: "user"}
 
 
 def test_register_bad():  # noqa D103
@@ -35,12 +33,14 @@ def test_register_bad():  # noqa D103
 
 
 def test_unregister():  # noqa D103
-    assert "1" == test_db.unregister(uuid=unuser.uuid)
+    ind = str(test_db.cid)
+    assert ind == test_db.unregister(uuid=ind)
     assert test_db.users == {}
     assert test_db.logins == {}
     assert test_db.pswds == {}
 
 
 def test_unregister_bad():
+    ind = str(test_db.cid)
     with pytest.raises(UserNotFoundError):
-        test_db.unregister(uuid=unuser.uuid)
+        test_db.unregister(uuid=ind)

@@ -1,4 +1,4 @@
-from app.data_base import data_base
+from app.data_base.data_base import DataBase
 from app.auth.dto import UserRegister
 from app.auth.dto import UserUnregister 
 from app.models import User
@@ -9,6 +9,7 @@ from typing import List
 
 
 auth_router = APIRouter(prefix="/auth")
+data_base = DataBase()
 
 
 @auth_router.post("/register")
@@ -25,6 +26,6 @@ def unregister(user: UserUnregister):
 
 # todo remove later -- debug only
 @auth_router.get("/allusers")
-def allusers() -> List[User]:
+def allusers():
     """Shows the list of all users in the database."""
-    return list(data_base.users)
+    return data_base.users
