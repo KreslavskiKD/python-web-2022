@@ -5,3 +5,8 @@ app/__pycache__/
 app/auth/__pycache__/
 app/data_base/__pycache__/
 app/utils/__pycache__/
+app/tests/__pycache__/
+app/tests/integration_tests/__pycache__/
+app/tests/unit_tests/__pycache__/
+postogramm.db
+
