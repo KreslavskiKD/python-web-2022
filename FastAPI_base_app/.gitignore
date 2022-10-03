@@ -1,0 +1,7 @@
+# Created by pytest automatically.
+
+.pytest_cache/
+app/__pycache__/
+app/auth/__pycache__/
+app/data_base/__pycache__/
+app/utils/__pycache__/

@@ -1,0 +1,9 @@
+dependency-injector
+fastapi
+uvicorn
+httpx
+pytest-asyncio
+pytest-cov
+requests
+sqlalchemy
+pyyaml
