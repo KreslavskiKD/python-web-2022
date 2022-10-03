@@ -11,4 +11,4 @@ class UserRegister(BaseModel):
 class UserUnregister(BaseModel):
     """DTO class for unregistering a user."""
 
-    uuid: str
+    uid: str

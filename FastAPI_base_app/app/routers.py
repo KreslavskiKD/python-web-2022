@@ -1,7 +1,5 @@
 from fastapi import APIRouter
 
-from app import contracts
-
 router = APIRouter()
 
 
@@ -13,13 +11,6 @@ def read_root():  # noqa: D103
 @router.get("/posts/{post_id}")
 async def read_post(post_id: int):  # noqa: D103
     return {"post_id": post_id}
-
-
-@router.get("/users/")
-async def read_user(user_id: str, q: str | None = None):    # noqa: D103
-    if q:
-        return {"user_id": user_id, "q": q}
-    return {"user_id": user_id}
 
 
 @router.get("/users/{user_id}/posts/{post_id}")

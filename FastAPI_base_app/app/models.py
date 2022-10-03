@@ -1,11 +1,21 @@
 from pydantic import BaseModel
-from app.contracts import Locations
+
+
+class PostModel(BaseModel):  # this is post in Postogram
+    """Contract for post."""
+
+    pid: int
+    title: str
+    time: str  # here should later be some time format
+    description: str
+    locations: list[int]
+    references: str  # here should be later list of users and companies
 
 
 class User(BaseModel):
     login: str
     uuid: str
-    favlist: Locations
+    favlist: list[int]
     posts: list[int]
 
     def __eq__(self, other: object) -> bool:

@@ -1,36 +1,114 @@
 import pytest
+from unittest import mock
+from fastapi.testclient import TestClient
 
-from app.models import User
-from app.contracts import Locations
-from app.auth.router import register, unregister, allusers
-from app.auth.dto import UserRegister, UserUnregister
+from app.db_models import User
 from app.exceptions import LoginAlreadyTakenError, UserNotFoundError
+from app.main import app
+from app.repositories import UserRepository
 
-user = UserRegister(login="test", pswd="user")
-unuser = UserUnregister(uuid="1")
-answ_user = User(
-    login="test",
-    uuid="1",
-    favlist=Locations(owner="1", locations=[]),
-    posts=[],
-)
+answ_user = User(id="xyz", login="test1", hashed_password="pwd", locations=[], posts=[])
 
 
-def test_registred():  # noqa: D103
-    register(user)
-    users = allusers()
-    assert users == {"1": answ_user}
+@pytest.fixture
+def client():
+    yield TestClient(app)
 
 
-def test_registred_once():  # noqa: D103
-    with pytest.raises(LoginAlreadyTakenError):
-        register(user)
-        register(user)
-        users = allusers()
-        assert users == {"1": answ_user}
+def test_get_list(client):
+    repository_mock = mock.Mock(spec=UserRepository)
+    repository_mock.get_all.return_value = [
+        User(id="xyz", login="test1", hashed_password="pwd", locations=[], posts=[]),
+        User(id="abc", login="test2", hashed_password="pwd", locations=[], posts=[]),
+    ]
+
+    with app.container.user_repository.override(repository_mock):
+        response = client.get("/auth/users")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data == [
+        {
+            "id": "xyz",
+            "login": "test1",
+            "hashed_password": "pwd",
+            "locations": [],
+            "posts": [],
+        },
+        {
+            "id": "abc",
+            "login": "test2",
+            "hashed_password": "pwd",
+            "locations": [],
+            "posts": [],
+        },
+    ]
 
 
-def test_unregistred():  # noqa: D103
-    unregister(unuser)
-    users = allusers()
-    assert users == {}
+def test_get_by_id(client):
+    repository_mock = mock.Mock(spec=UserRepository)
+    repository_mock.get_by_id.return_value = answ_user
+
+    with app.container.user_repository.override(repository_mock):
+        response = client.get("/auth/users/xyz")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data == {
+        "id": "xyz",
+        "login": "test1",
+        "hashed_password": "pwd",
+        "locations": [],
+        "posts": [],
+    }
+    repository_mock.get_by_id.assert_called_once_with("xyz")
+
+
+def test_get_by_id_404(client):
+    repository_mock = mock.Mock(spec=UserRepository)
+    repository_mock.get_by_id.side_effect = UserNotFoundError("xyz")
+
+    with app.container.user_repository.override(repository_mock):
+        response = client.get("/auth/users/xyz")
+
+    assert response.status_code == 404
+
+
+@mock.patch("app.repositories.uuid4", return_value="xyz")
+def test_register(_, client):
+    repository_mock = mock.Mock(spec=UserRepository)
+    repository_mock.add.return_value = answ_user
+
+    with app.container.user_repository.override(repository_mock):
+        response = client.post("/auth/users", json={"login": "test1", "pswd": "pwd"})
+
+    assert response.status_code == 201
+    data = response.json()
+    assert data == {
+        "id": "xyz",
+        "login": "test1",
+        "hashed_password": "pwd",
+        "locations": [],
+        "posts": [],
+    }
+    repository_mock.add.assert_called_once_with(login="test1", password="pwd")
+
+
+def test_unregister(client):
+    repository_mock = mock.Mock(spec=UserRepository)
+
+    with app.container.user_repository.override(repository_mock):
+        response = client.delete("/auth/users/xyz")
+
+    assert response.status_code == 204
+    repository_mock.delete_by_id.assert_called_once_with("xyz")
+
+
+def test_unregister_404(client):
+    repository_mock = mock.Mock(spec=UserRepository)
+    repository_mock.delete_by_id.side_effect = UserNotFoundError("xyz")
+
+    with app.container.user_repository.override(repository_mock):
+        response = client.delete("/auth/users/xyz")
+
+    assert response.status_code == 404
