@@ -3,7 +3,7 @@ syntax = "proto3";
 message Null {}
 
 message RequestForAJoke {
-  string theme = 2;
+  string theme = 1;
 }
 
 message Anekdote {

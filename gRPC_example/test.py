@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import json
-from time import time
 
 import urllib3
 
@@ -9,23 +8,14 @@ http = urllib3.PoolManager()
 
 
 def main():
-    start = time()
-
-    for _ in range(2000):
-        http.request(
+    for _ in range(10):
+        r = http.request(
             "POST",
-            "http://localhost:3001/ticket",
+            "http://127.0.0.1:5005/TestService/GetAnekdote",
             headers={"Content-Type": "application/json"},
-            body=json.dumps({
-                "name": "x",
-                "description": "...",
-                "story_points": 3
-            })
+            body=json.dumps({"theme": "stirlitc"}),
         )
-
-        # print(r.data.decode("utf-8"))
-
-    print(time() - start)
+        print(r.data.decode("utf-8"))
 
 
 if __name__ == "__main__":

@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rservice.proto\"\x06\n\x04Null\" \n\x0fRequestForAJoke\x12\r\n\x05theme\x18\x02 \x01(\t\"\x1c\n\x08\x41nekdote\x12\x10\n\x08\x61nekdote\x18\x01 \x01(\t2Q\n\x0bTestService\x12\x16\n\x06Health\x12\x05.Null\x1a\x05.Null\x12*\n\x0bGetAnekdote\x12\x10.RequestForAJoke\x1a\t.Anekdoteb\x06proto3'
+  serialized_pb=b'\n\rservice.proto\"\x06\n\x04Null\" \n\x0fRequestForAJoke\x12\r\n\x05theme\x18\x01 \x01(\t\"\x1c\n\x08\x41nekdote\x12\x10\n\x08\x61nekdote\x18\x01 \x01(\t2Q\n\x0bTestService\x12\x16\n\x06Health\x12\x05.Null\x1a\x05.Null\x12*\n\x0bGetAnekdote\x12\x10.RequestForAJoke\x1a\t.Anekdoteb\x06proto3'
 )
 
 
@@ -60,7 +60,7 @@ _REQUESTFORAJOKE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='theme', full_name='RequestForAJoke.theme', index=0,
-      number=2, type=9, cpp_type=9, label=1,
+      number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
