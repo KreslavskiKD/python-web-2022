@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message Null {}
+
+message RequestForAJoke {
+  string theme = 1;
+}
+
+message Anekdote {
+  string anekdote = 1;
+}
+
+service TestService {
+  rpc Health(Null) returns (Null);
+  rpc GetAnekdote(RequestForAJoke) returns (Anekdote);
+}
